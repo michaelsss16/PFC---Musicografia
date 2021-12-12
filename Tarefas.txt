@@ -8,9 +8,12 @@ Fazer a distribuição em camadas e módulos (microserviços)
 Adicionar interface innicial para usuário
 Adicionar leitura de arquivo
 controlar passagem de leitura a partir do botão
+adicionar arquivo de constantes para controle das configurações do programa (utilizar JSON para armazenamento sólido dos dados )
+terminar de definir o método de imprimir da mensageria conforme decisões da configuração e presença do sintetizador 
 
 2. Incremetais
 Adicionar leitura dos valores de representação por banco de dados em arquivo (sqlite)
 Iniciar o desenvolvimento de modos de operação 
 Aplicar interface mais amigável, a partir de pygaame
-
+utilizar sintetizador do google 
+adicionar comandos de voz para passagem 
