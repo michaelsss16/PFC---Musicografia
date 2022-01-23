@@ -1,4 +1,5 @@
-1. Obrigadtórias e sequenciais
+ 1. Obrigatórias e sequenciais
+Definir um método para retorno de objeto com as configurações iniciais e modificar todas as chamadas existentes para o config no código 
 Utilização de três botões diferentes para leitura
 Módulo de gatilho para alternância de eventos
 Utilizar portas de saídas pwm para controle do buzzer
@@ -7,6 +8,7 @@ Conseguir acionar o motor
 Fazer a distribuição em camadas e módulos (microserviços)
 Adicionar interface innicial para usuário
 Adicionar leitura de arquivo
+Adicionar informações sobre conexão da placa
 controlar passagem de leitura a partir do botão
 adicionar arquivo de constantes para controle das configurações do programa (utilizar JSON para armazenamento sólido dos dados )
 terminar de definir o método de imprimir da mensageria conforme decisões da configuração e presença do sintetizador 

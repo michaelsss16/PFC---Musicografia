@@ -1,6 +1,7 @@
 import pyttsx3
-def IniciarSintetizadorTTS():
+# Método para iniciar o sintetizador de voz. Retorna objeto com as configuraões iniciais do sintetizador.
+def IniciarSintetizadorTTS(numeroDaVoz = 4):
     Robo = pyttsx3.init()
     voices = Robo.getProperty('voices')
-    Robo.setProperty('voice', voices[4].id) 
+    Robo.setProperty('voice', voices[numeroDaVoz].id) 
     return Robo
