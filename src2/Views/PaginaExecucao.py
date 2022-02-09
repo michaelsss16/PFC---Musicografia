@@ -1,5 +1,9 @@
+from Views.PaginaConfiguracoes import *
 from pyfirmata import ArduinoMega, util
 import time                     
+
+
+
 def Configure():
 	board = ArduinoMega('COM5')
 	an0 =  board.get_pin('a:0:i')
@@ -7,6 +11,8 @@ def Configure():
 	it.start()
 	board.analog[0].enable_reporting()
 	return an0
+
+an0 = Configure()
 
 def ReadAnalog(port):
 	time.sleep(0.1)
@@ -18,7 +24,7 @@ def EsperarBotaoSerPressionado(an0):
 	while(1):
 		time.sleep(0.5)
 		val = (ReadAnalog(an0))*100
-		print(val)
+		#print(val)
 		if(val>=90):
 			#print("Botão pressionado!")
 			BotaoPresssionado=1
@@ -26,10 +32,13 @@ def EsperarBotaoSerPressionado(an0):
 			break;
 	return True
 
-an0 = Configure()
-EsperarBotaoSerPressionado(an0)
-print("Botão acionado com sucesso!")
-
-
-#valor = board.analog[0].read()
-#print(valor)
+def PaginaExecucao():
+	Imprimir("Execução da partitura iniciada")
+	with open('./PartituraInicial.txt') as file:
+		texto = file.readlines()
+	for linha in texto:
+		for nota in linha:
+			EsperarBotaoSerPressionado(an0)
+			Imprimir(nota)
+			Imprimir(ord(nota))
+			Imprimir(bin(ord(nota)-97))

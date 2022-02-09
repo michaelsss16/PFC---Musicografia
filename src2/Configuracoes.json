@@ -1,6 +1,6 @@
 {
     "Sintetizador": {
-        "SintetizadorLigado": false,
+        "SintetizadorLigado": true,
         "Voz": 4
     }
 }
