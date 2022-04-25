@@ -1,44 +1,39 @@
+import json
 from Views.PaginaConfiguracoes import *
+from Placa.Placa import *
+from Utils.Constantes import *
 from pyfirmata import ArduinoMega, util
 import time                     
 
+# Definição das funções utilizadas para acesso ao dicionário braille e conversão dos pontos para cela matricial
+def DicionarioBraille():
+	file = open('BrailleDictionary.json', encoding='utf-8', mode='r') 
+	dic = json.load(file)
+	file.close()
+	return dic
 
+def ConverterParaCela(letra, dicionario):
+	cela = [0, 0, 0, 0, 0, 0]
+	try:
+		numero = dicionario[letra.lower()][0]
+		binario = bin(numero)
+		vetor = [int(d) for d in str(bin(numero))[2:]]
+		vetor = vetor[::-1]
+		for d in range(len(vetor)):
+			cela[d] = vetor[d]
+		return cela
+	except:
+		return "Erro na definição da cela"
 
-def Configure():
-	board = ArduinoMega('COM5')
-	an0 =  board.get_pin('a:0:i')
-	it = util.Iterator(board)
-	it.start()
-	board.analog[0].enable_reporting()
-	return an0
-
-an0 = Configure()
-
-def ReadAnalog(port):
-	time.sleep(0.1)
-	return an0.read()
-
-
-def EsperarBotaoSerPressionado(an0):
-	BotaoPresssionado = 0
-	while(1):
-		time.sleep(0.5)
-		val = (ReadAnalog(an0))*100
-		#print(val)
-		if(val>=90):
-			#print("Botão pressionado!")
-			BotaoPresssionado=1
-		if((BotaoPresssionado==1 )and (val<=90)):
-			break;
-	return True
-
+# Função principal da página de execução da partitura em arquivo
 def PaginaExecucao():
-	Imprimir("Execução da partitura iniciada")
-	with open('./PartituraInicial.txt') as file:
+	dic = DicionarioBraille()
+	Imprimir(Constantes['PaginaDeExecucao']['MensagemDeInicializacao'])
+	with open('./PartituraInicial.txt', encoding='utf-8', mode='r') as file:
 		texto = file.readlines()
 	for linha in texto:
 		for nota in linha:
-			EsperarBotaoSerPressionado(an0)
-			Imprimir(nota)
-			Imprimir(ord(nota))
-			Imprimir(bin(ord(nota)-97))
+			AvancoOuRecuoPressionado(botaoAvanco, botaoRecuo)
+			Imprimir(ConverterParaCela(nota, dic))
+	Imprimir(Constantes['PaginaDeExecucao']['MensagemDeFinalizacao'])
+	Pulsar(buzzer, 0.3)
