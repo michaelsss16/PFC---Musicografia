@@ -23,17 +23,33 @@ def ConverterParaCela(letra, dicionario):
 			cela[d] = vetor[d]
 		return cela
 	except:
-		return "Erro na definição da cela"
+		#Imprimir("Erro na definição da cela. Verifique o documento de partitura")
+		return CELAVAZIA
+
+# Função para saídas específicas para casos especiais de entrada do documento de partitura
+def TratarEntrada(letra, dicionario):
+	cela = ConverterParaCela(letra, dicionario)
+	if(letra == '\n'):
+		 Pulsar(buzzer, 1, 1, 0.1) 
+		 Imprimir("Quebra de linha")
+	return cela
 
 # Função principal da página de execução da partitura em arquivo
 def PaginaExecucao():
 	dic = DicionarioBraille()
 	Imprimir(Constantes['PaginaDeExecucao']['MensagemDeInicializacao'])
 	with open('./PartituraInicial.txt', encoding='utf-8', mode='r') as file:
-		texto = file.readlines()
-	for linha in texto:
-		for nota in linha:
-			AvancoOuRecuoPressionado(botaoAvanco, botaoRecuo)
-			Imprimir(ConverterParaCela(nota, dic))
+		texto = file.read()
+		file.close()
+	tamanhoDaPagina = len(texto)
+	nota = 0
+	while(nota != tamanhoDaPagina):
+		cela = TratarEntrada(texto[nota], dic)
+		Imprimir(cela)
+		AtivarMotores(cela)
+		nota = nota + AvancoOuRecuoPressionado(botaoAvanco, botaoRecuo)
+
 	Imprimir(Constantes['PaginaDeExecucao']['MensagemDeFinalizacao'])
-	Pulsar(buzzer, 0.3)
+	Pulsar(buzzer, 1)
+	AtivarMotores(CELAVAZIA)
+	return

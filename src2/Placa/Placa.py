@@ -1,18 +1,39 @@
 from pyfirmata import Arduino, util
 import time                     
+from Utils.Util import *
 
-# Definição da placa e das portas disponíveis para uso 
-board = Arduino('COM3')
-botaoReset =  board.get_pin('a:1:i')
+#Tentativa de conexão com a placa arduino
+try: 
+	board = Arduino('COM3')
+except:
+	raise Exception(Imprimir("Não foi possível se conectar com a placa. Verifique a conexão"))
+
+# Definição das portas utilizadas da arduino
+botaoReset =  board.get_pin('d:7:i')
 botaoAvanco = board.get_pin('d:2:i')
 botaoRecuo = board.get_pin('d:4:i')
-buzzer = board.get_pin('d:10:p')
+ponto1 = board.get_pin('d:3:s')
+ponto2 = board.get_pin('d:5:s')
+ponto3 = board.get_pin('d:6:s')
+ponto4 = board.get_pin('d:9:s')
+ponto5 = board.get_pin('d:10:s')
+ponto6= board.get_pin('d:11:s')
+buzzer = board.get_pin('d:8:o')
 
 it = util.Iterator(board)
 it.start()
 board.analog[1].enable_reporting()
 
 # Funções de manipulação que envolvem a placa 
+def AtivarMotores(cela):
+	#Escrever zeros antes de atuar conforme o passado na cela.
+	ponto1.write(110) if cela[0] else ponto1.write(20) 
+	ponto2.write(90) if cela[1] else ponto2.write(0) 
+	ponto3.write(110) if cela[2] else ponto3.write(20) 
+	ponto4.write(110) if cela[3] else ponto4.write(20) 
+	ponto5.write(110) if cela[4] else ponto5.write(20) 
+	ponto6.write(110) if cela[5] else ponto6.write(20) 
+
 def ReadAnalog(port):
 	time.sleep(0.05)
 	return port.read()
@@ -36,16 +57,26 @@ def AvancoOuRecuoPressionado(avanco, recuo):
 	while(True):
 		time.sleep(0.05)
 		valAvanco = avanco.read()
+		time.sleep(0.05)
+		valRecuo = recuo.read()
+
 		if(valAvanco==True  and  not avancoPressionado):
 			avancoPressionado = True
-			print("Pressionado")
 		if(avancoPressionado == True and valAvanco == False):
 			break
-	print("solto")
-	return True
+
+		if(valRecuo==True  and  not recuoPressionado):
+			recuoPressionado= True
+		if(recuoPressionado== True and valRecuo== False):
+			break
+
+	if avancoPressionado:
+		return 1
+	if recuoPressionado:
+		return -1
 
 def Pulsar(porta, intensidade = 1, quantidadeDePulsos = 2, tempo=0.2, intensidadeMinima = 0):
-	# Adicionar verificação de configuração verificand se o campo interface.BipsBuzzer está ligado 
+	if not Configuracoes['Interface']['BipsBuzzer']: return 
 	porta.write(0)
 	for i in range(quantidadeDePulsos):
 		porta.write(intensidade)

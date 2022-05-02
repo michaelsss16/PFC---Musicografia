@@ -3,10 +3,34 @@
 import pyttsx3
 import json
 
+# Dicionário de configuração padrão 
+ConfiguracaoPadrao = {
+	"Interface":
+	{
+		"BipsBuzzer" : True
+	},
+	"Sintetizador": {
+		"SintetizadorLigado": False,
+		"Voz": 4
+	},
+	"Arduino" : {
+		"BotaoAvanco" : "a:0:i",
+		"BotaoRecuo" : ""
+	}
+}
+
 # Instanciação do objeto de configuração armazenado em arquivo 
-with open('configuracoes.json', encoding='utf-8', mode='r') as file:
-    Configuracoes = json.load(file)
-    file.close()
+try: 
+	with open('configuracoes.json', encoding='utf-8', mode='r') as file:
+		Configuracoes = json.load(file)
+		file.close()
+except: 
+	with open('Configuracoes.json', 'w') as file:
+		json.dump(ConfiguracaoPadrao, file, indent=4)
+		Configuracoes = ConfiguracaoPadrao
+		file.close()
+
+
 
 # Método de tratamento das escolhas oferecidas em cada uma das páginas 
 def EscolherComando(listaDeValoresPermitidos = [0], listaDeDescricoes = ['0- Finalizar\n'], mensagemDeErro = "O valor inserido não é válido. Escolha outra opção."):

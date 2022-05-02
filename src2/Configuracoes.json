@@ -1,14 +1,13 @@
 {
-    "Interface ":
-    {
-        "BipsBuzzer" : true
+    "Interface": {
+        "BipsBuzzer": true
     },
     "Sintetizador": {
         "SintetizadorLigado": false,
         "Voz": 4
     },
-    "Arduino" : {
-        "BotaoAvanco" : "a:0:i",
-        "BotaoRecuo" : ""
+    "Arduino": {
+        "BotaoAvanco": "a:0:i",
+        "BotaoRecuo": ""
     }
 }
