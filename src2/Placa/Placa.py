@@ -4,9 +4,14 @@ from Utils.Util import *
 
 #Tentativa de conexão com a placa arduino
 try: 
-	board = Arduino('COM3')
+	board = Arduino(Configuracoes["Arduino"]["Porta"])
 except:
-	raise Exception(Imprimir("Não foi possível se conectar com a placa. Verifique a conexão"))
+	escolha = input(Imprimir("Não foi possível se conectar com a placa.\n Digite 0 para finalizar o programa ou um dígito com a nova porta de comunicação."))
+	if escolha == '0':
+		raise Exception(Imprimir("Não foi possível se conectar com a placa. Verifique a conexão"))
+	else:
+		AlterarPortaDeComunicacao(escolha)
+		raise Exception(Imprimir("Reinicie o programa para aplicar as modificações."))
 
 # Definição das portas utilizadas da arduino
 botaoReset =  board.get_pin('d:7:i')

@@ -5,7 +5,7 @@ from Utils.Constantes import *
 
 def PaginaConfiguracoes():
 	Imprimir("Página de configurações")
-	opcao2 = EscolherComando([0, 1, 2, 9], OPCOESPAGINACONFIGURACOES )
+	opcao2 = EscolherComando([0, 1, 2, 3, 8, 9], OPCOESPAGINACONFIGURACOES )
 	if opcao2 == '0':
 		return 
 	if(opcao2 == 1):
@@ -31,6 +31,13 @@ def PaginaConfiguracoes():
 			Configuracoes['Interface']['BipsBuzzer'] =True
 			with open('Configuracoes.json', 'w') as file:
 				json.dump(Configuracoes, file, indent=4)
+
+	if opcao2 ==  3:
+		AlterarVozDoSintetizador()
+
+	if opcao2 == 8:
+		escolha = input(Imprimir("Digite o número da porta que deseja atribuir para comunicação com a placa arduino:"))
+		AlterarPortaDeComunicacao(escolha)
 
 	if(opcao2==9):
 		with open('Configuracoes.json', 'w') as file:

@@ -12,6 +12,8 @@ OPCOESPAGINAINICIAL =[
 OPCOESPAGINACONFIGURACOES = [
 		'1- Iniciar/Desligar sintetizador de voz.',
 		'2- Ligar/Desligar bips da placa',
+		'3- Alterar voz do sintetizador.',
+		'8- Alterar porta de comunicação com placa arduíno.',
 		'9- Retornar aos padrões de configuração.',
 		'0- Retornar a página anterior.']
 

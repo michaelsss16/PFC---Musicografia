@@ -3,10 +3,11 @@
         "BipsBuzzer": true
     },
     "Sintetizador": {
-        "SintetizadorLigado": false,
+        "SintetizadorLigado": true,
         "Voz": 4
     },
     "Arduino": {
+        "Porta": "COM3",
         "BotaoAvanco": "a:0:i",
         "BotaoRecuo": ""
     }
