@@ -1,6 +1,9 @@
-import pyttsx3
-from Modules.Interface.PaginaInicial import *
-from Modules.Sintetizador.TTS import *
-from Modules.Util.Mensageria  import *
-Imprimir("Teste de mensagem")
-#PaginaInicial()
+# Código de inicialização para o programa 
+#Importações
+import json
+from Views.PaginaInicial  import *
+
+def Main():
+    PaginaInicial()
+
+Main()

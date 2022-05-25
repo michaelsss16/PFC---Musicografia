@@ -1,6 +1,6 @@
 {
     "Interface": {
-        "BipsBuzzer": true
+        "BipsBuzzer": false
     },
     "Sintetizador": {
         "SintetizadorLigado": false,

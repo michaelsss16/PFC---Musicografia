@@ -14,9 +14,9 @@ except:
 		raise Exception(Imprimir("Reinicie o programa para aplicar as modificações."))
 
 # Definição das portas utilizadas da arduino
-botaoReset =  board.get_pin('d:7:i')
+botaoReset =  board.get_pin('d:4:i')
 botaoAvanco = board.get_pin('d:2:i')
-botaoRecuo = board.get_pin('d:4:i')
+botaoRecuo = board.get_pin('d:7:i')
 ponto1 = board.get_pin('d:3:s')
 ponto2 = board.get_pin('d:5:s')
 ponto3 = board.get_pin('d:6:s')
@@ -31,14 +31,14 @@ board.analog[1].enable_reporting()
 
 # Funções de manipulação que envolvem a placa 
 def AtivarMotores(cela):
-	maxAng = 90
-	minAng = 0
-	ponto1.write(maxAng ) if cela[0] else ponto1.write(minAng ) 
-	ponto2.write(maxAng ) if cela[1] else ponto2.write(minAng ) 
-	ponto3.write(maxAng ) if cela[2] else ponto3.write(minAng ) 
-	ponto4.write(maxAng ) if cela[3] else ponto4.write(minAng ) 
-	ponto5.write(maxAng ) if cela[4] else ponto5.write(minAng ) 
-	ponto6.write(maxAng ) if cela[5] else ponto6.write(minAng ) 
+	maxang = 0
+	minAng = 90
+	ponto1.write(maxang) if cela[0] else ponto1.write(minAng ) 
+	ponto2.write(maxang ) if cela[1] else ponto2.write(minAng) 
+	ponto3.write(maxang ) if cela[2] else ponto3.write(minAng ) 
+	ponto4.write(maxang ) if cela[3] else ponto4.write(minAng ) 
+	ponto5.write(maxang ) if cela[4] else ponto5.write(minAng ) 
+	ponto6.write(maxang ) if cela[5] else ponto6.write(minAng ) 
 
 def ReadAnalog(port):
 	time.sleep(0.05)
@@ -57,7 +57,7 @@ def EsperarBotaoSerPressionado(botao):
 			break;
 	return True
 
-def AvancoOuRecuoPressionado(avanco, recuo):
+def AvancoOuRecuoPressionado(avanco, recuo, reset):
 	avancoPressionado = False
 	recuoPressionado = False
 	while(True):
@@ -65,7 +65,15 @@ def AvancoOuRecuoPressionado(avanco, recuo):
 		valAvanco = avanco.read()
 		time.sleep(0.05)
 		valRecuo = recuo.read()
+		time.sleep(0.05)
+		valReset = reset.read()
 
+		if(valReset == True):
+			if recuoPressionado:
+				Pulsar(buzzer, 1, 2,0.1)
+				return 0
+			elif avancoPressionado:
+				return 'END'
 		if(valAvanco==True  and  not avancoPressionado):
 			avancoPressionado = True
 		if(avancoPressionado == True and valAvanco == False):
