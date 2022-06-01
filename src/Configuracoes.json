@@ -1,6 +1,8 @@
 {
     "Interface": {
-        "BipsBuzzer": false
+        "BipsBuzzer": true,
+        "InformacoesPartitura": true,
+        "MatrizBraille": true
     },
     "Sintetizador": {
         "SintetizadorLigado": false,

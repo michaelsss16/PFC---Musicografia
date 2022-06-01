@@ -9,7 +9,9 @@ TamanhoDoVetorDeVozes = 0
 ConfiguracaoPadrao = {
 	"Interface":
 	{
-		"BipsBuzzer" : True
+		"BipsBuzzer" : True,
+		"InformacoesPartitura":True,
+		"MatrizBraille" : True
 	},
 	"Sintetizador": {
 		"SintetizadorLigado": False,
@@ -64,6 +66,8 @@ def IniciarSintetizadorTTS():
 Sint = IniciarSintetizadorTTS()
 
 def Imprimir(msg):
+	if msg== '' or msg == []:
+		return 
 	try:
 		if(Configuracoes['Sintetizador']['SintetizadorLigado']):
 			Sint.say(msg)

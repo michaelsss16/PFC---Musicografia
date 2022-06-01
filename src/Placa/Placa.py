@@ -60,6 +60,7 @@ def EsperarBotaoSerPressionado(botao):
 def AvancoOuRecuoPressionado(avanco, recuo, reset):
 	avancoPressionado = False
 	recuoPressionado = False
+	resetPressionado = False
 	while(True):
 		time.sleep(0.05)
 		valAvanco = avanco.read()
@@ -69,11 +70,18 @@ def AvancoOuRecuoPressionado(avanco, recuo, reset):
 		valReset = reset.read()
 
 		if(valReset == True):
-			if recuoPressionado:
-				Pulsar(buzzer, 1, 2,0.1)
-				return 0
-			elif avancoPressionado:
-				return 'END'
+			resetPressionado = True
+		if  recuoPressionado and avancoPressionado and resetPressionado and not valReset:
+			resetPressionado = False
+			return 'finalizar'
+		if recuoPressionado and resetPressionado and not valReset:
+			resetPressionado = False
+			Pulsar(buzzer, 1, 2,0.1)
+			return 0
+		if avancoPressionado and resetPressionado and not valReset:
+			resetPressionado = False
+			Pulsar(buzzer, 1, 3, 0.1)
+			return 'end'
 		if(valAvanco==True  and  not avancoPressionado):
 			avancoPressionado = True
 		if(avancoPressionado == True and valAvanco == False):
