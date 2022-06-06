@@ -14,8 +14,9 @@ def EnviarComandos():
 		AtivarMotores(cela)
 		entrada = input()
 		cela = [0, 0, 0, 0, 0, 0]
-		if entrada == 'sair': break
-		for letra in entrada:
+	if entrada == 'sair':
+		return
+	for letra in entrada:
 			if letra == 's': cela[0]=1
 			if letra == 'd': cela[1]=1
 			if letra == 'f': cela[2]=1
@@ -36,3 +37,4 @@ def PaginaControleDireto():
 		elif opcao2 == 10:
 			Imprimir(TEXTOAJUDAPAGINACONTROLEDIRETO)
 	Imprimir("Retornando para a  página inicial.")
+	

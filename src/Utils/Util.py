@@ -1,7 +1,8 @@
-# Contém todos os métodos auxiliares para as principais páginas do programa
-
 import pyttsx3
 import json
+import time 
+from Utils.Constantes import *
+
 #Variáveis globais
 TamanhoDoVetorDeVozes = 0
 
@@ -11,10 +12,13 @@ ConfiguracaoPadrao = {
 	{
 		"BipsBuzzer" : True,
 		"InformacoesPartitura":True,
+		"BipCompasso":True,
+		"MensagemCompasso":True,
+		"Metronomo":True,
 		"MatrizBraille" : True
 	},
 	"Sintetizador": {
-		"SintetizadorLigado": False,
+		"Sintetizador": False,
 		"Voz": 4
 	},
 	"Arduino" : {
@@ -35,6 +39,43 @@ except:
 		Configuracoes = ConfiguracaoPadrao
 		file.close()
 
+# Método para auxiliar na determinação de BPM
+def RetornarBpm():
+	finalizar = False
+	while not finalizar:
+		Imprimir('Pressione a tecla enter oito vezes no ritmo desejado.')
+		input()
+		a = time.time()
+		input()
+		b = time.time()
+		input()
+		c = time.time()
+		input()
+		d = time.time()
+		input()
+		e = time.time()
+		input()
+		f = time.time()
+		input()
+		g = time.time()
+		input()
+		h = time.time()
+
+		media = ((b-a)+(c-b)+(d-c)+(e-d)+(f-e)+(g-f)+(h-g))/7
+		bpm = int(60/media)
+		Imprimir("O BPM encontrado foi: "+ str(bpm))
+		val = EscolherComando([0, 1, 2], OPCOESBPM )
+		if val == 0:
+			finalizar = False
+		if val == 1:
+			return bpm
+		if val == 2:
+			try:
+				return int(input('Bpm:'))
+			except:
+				Imprimir("Entrada inválida. Valor definido para 60 BPM")
+				return 60
+
 # Método de tratamento das escolhas oferecidas em cada uma das páginas 
 def EscolherComando(listaDeValoresPermitidos = [0], listaDeDescricoes = ['0- Finalizar\n'], mensagemDeErro = "O valor inserido não é válido. Escolha outra opção."):
 	erro = False
@@ -43,7 +84,10 @@ def EscolherComando(listaDeValoresPermitidos = [0], listaDeDescricoes = ['0- Fin
 			raise Exception ("Tamanho da lista de valores permitidos e de descrições não é compatível")
 		for item in listaDeDescricoes:
 			Imprimir(item)
-		valorInserido = int(input(Imprimir("Digite a sua escolha:")))
+		try:
+			valorInserido = int(input(Imprimir("Digite a sua escolha:")))
+		except:
+			valorInserido = -1
 		if valorInserido in listaDeValoresPermitidos:
 			return valorInserido
 		else:
@@ -60,7 +104,7 @@ def IniciarSintetizadorTTS():
 		return Robo
 	except:
 		print("Não foi possível iniciar o sintetizador. Verifique as configurações escolhidas.")
-		Configuracoes['Sintetizador']['SintetizadorLigado'] = False
+		Configuracoes['Sintetizador']['Sintetizador'] = False
 
 
 Sint = IniciarSintetizadorTTS()
@@ -69,12 +113,12 @@ def Imprimir(msg):
 	if msg== '' or msg == []:
 		return 
 	try:
-		if(Configuracoes['Sintetizador']['SintetizadorLigado']):
+		if(Configuracoes['Sintetizador']['Sintetizador']):
 			Sint.say(msg)
 			Sint.runAndWait()
 	except:
 		print("Não foi possível iniciar o sintetizador. Verifique as configurações.")
-		Configuracoes['Sintetizador']['SintetizadorLigado'] = False
+		Configuracoes['Sintetizador']['Sintetizador'] = False
 	print(msg)
 	return ""
 

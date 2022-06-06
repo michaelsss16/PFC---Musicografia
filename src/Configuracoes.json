@@ -1,11 +1,14 @@
 {
     "Interface": {
-        "BipsBuzzer": true,
+        "BipsBuzzer": false,
         "InformacoesPartitura": true,
+        "BipCompasso": true,
+        "MensagemCompasso": true,
+        "Metronomo": true,
         "MatrizBraille": true
     },
     "Sintetizador": {
-        "SintetizadorLigado": false,
+        "Sintetizador": false,
         "Voz": 4
     },
     "Arduino": {

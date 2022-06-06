@@ -113,13 +113,16 @@ def CompassoAnterior(vetorFinais, nota):
 		return [vetorPosicao[0], vetorFinais[vetorPosicao[0]]+1]
 
 # Função principal para a reprodução 
-def IniciarReproducao():
+def IniciarReproducao(modo, bpm = 60):
 	global partituraSelecionada
 	Dicionario = RetornarDicionario()
 	with open(partituraSelecionada, encoding='utf-8', mode='r') as file:
 		arquivo = json.load(file)
 		file.close()
-	ApresentarInformacoesPartitura(arquivo)
+
+	if Configuracoes['Interface']['InformacoesPartitura']: ApresentarInformacoesPartitura(arquivo)
+
+# Preparo do arquivo de composição 
 	composicao = arquivo['Data']
 	tamanhoTotal = 0
 	tamanhoCompassos = [0]
@@ -128,42 +131,71 @@ def IniciarReproducao():
 		tamanhoCompassos.append(len(composicao[compasso]))
 	vetorFinais = RetornarFinais(tamanhoCompassos)
 
+# Opções de apresentação de informações da partitura e metrônomo 
+	if Configuracoes['Interface']['Metronomo']:
+		Imprimir('Pressione qualquer botão da placa para iniciar a reprodução do metrônomo')
+		AguardarQualquerBotaoSerPressionado()
+
+		if modo == 'manual':
+			Metronomo(arquivo['BPM'])
+		if modo == 'automatico':
+			Metronomo(bpm, 3)
+
+	Imprimir("Pressione qualquer botão da placa para iniciar a reprodução")
+	AguardarQualquerBotaoSerPressionado()
+
 	#Navegando na execução da partitura
 	notaLinear= 1
 	notaCompasso = 0
 	compasso = 0
+
+
 	while notaLinear!= tamanhoTotal+1:
+		if notaCompasso == 0 and compasso>=0 and Configuracoes['Interface']['BipCompasso']:  
+			Pulsar(buzzer, 1, 1, 0.05)
+			if Configuracoes['Interface']['MensagemCompasso']: Imprimir('Compasso número '+ str(compasso+1))
+
 		AtivarMotores(ConverterParaCela(composicao[compasso][notaCompasso]))
 		AprsentarInformacoesNota(composicao[compasso][notaCompasso], Dicionario)
-		operacao = AvancoOuRecuoPressionado(botaoAvanco, botaoRecuo, botaoReset)
-		if operacao == 1:
+
+		if modo == 'automatico':
+			time.sleep(60/bpm)
 			notaLinear = notaLinear+1
 			posicaoECompasso = RetornarCompassoENota(vetorFinais, notaLinear)
 			compasso = posicaoECompasso[0]
 			notaCompasso = posicaoECompasso[1]
-		if operacao == -1:
-			if notaLinear != 1:
-				notaLinear = notaLinear-1
-			posicaoECompasso = RetornarCompassoENota(vetorFinais, notaLinear)
-			compasso = posicaoECompasso[0]
-			notaCompasso = posicaoECompasso[1]
-		if operacao == 0:
-			cnota= CompassoAnterior(vetorFinais, notaLinear)
-			compasso = cnota[0]
-			notaLinear = cnota[1]
-			retorno = RetornarCompassoENota(vetorFinais, notaLinear)
-			notaCompasso = retorno[1]
+
+		if modo == 'manual':
+			operacao = AvancoOuRecuoPressionado(botaoAvanco, botaoRecuo, botaoReset)
+			if operacao == 1:
+				notaLinear = notaLinear+1
+				posicaoECompasso = RetornarCompassoENota(vetorFinais, notaLinear)
+				compasso = posicaoECompasso[0]
+				notaCompasso = posicaoECompasso[1]
+
+			if operacao == -1:
+				if notaLinear != 1:
+					notaLinear = notaLinear-1
+				posicaoECompasso = RetornarCompassoENota(vetorFinais, notaLinear)
+				compasso = posicaoECompasso[0]
+				notaCompasso = posicaoECompasso[1]
+			if operacao == 0:
+				cnota= CompassoAnterior(vetorFinais, notaLinear)
+				compasso = cnota[0]
+				notaLinear = cnota[1]
+				retorno = RetornarCompassoENota(vetorFinais, notaLinear)
+				notaCompasso = retorno[1]
 			
-		if operacao == 'finalizar':
-			break
-		if operacao == 'end':
-			cnota= ProximoCompasso(vetorFinais, notaLinear)
-			if cnota == 'end':
+			if operacao == 'finalizar':
 				break
-			compasso = cnota[0]
-			notaLinear = cnota[1]
-			retorno = RetornarCompassoENota(vetorFinais, notaLinear)
-			notaCompasso = retorno[1]
+			if operacao == 'end':
+				cnota= ProximoCompasso(vetorFinais, notaLinear)
+				if cnota == 'end':
+					break
+				compasso = cnota[0]
+				notaLinear = cnota[1]
+				retorno = RetornarCompassoENota(vetorFinais, notaLinear)
+				notaCompasso = retorno[1]
 
 	Imprimir("Fim da execução da partitura")
 	Pulsar(buzzer, 1)
@@ -175,13 +207,16 @@ def PaginaExecucao():
 	opcao2 = -1
 	Imprimir("Página de execução de partitura")
 	while opcao2 != 0:
-		opcao2 = EscolherComando([0, 1, 2, 10], OPCOESPAGINAEXECUCAO)
+		opcao2 = EscolherComando([0, 1, 2, 3, 10], OPCOESPAGINAEXECUCAO)
 		if opcao2 == 0:
 			return 
 		if  opcao2 == 1:
-			IniciarReproducao()
+			IniciarReproducao('manual')
 
 		if opcao2 == 2:
+			bpm = RetornarBpm()
+			IniciarReproducao('automatico', bpm)
+		if opcao2 == 3:
 			EscolherPartitura()
 
 		if opcao2 == 10:

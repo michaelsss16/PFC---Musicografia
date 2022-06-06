@@ -1,6 +1,18 @@
 import json
 from Utils.Constantes import *
 from Utils.Util import *
+
+def DefinirBpmPartitura():
+	val = input(Imprimir('Digite o valor do BPM ou 0 para iniciar a ajuda de definição.'))
+	if val == '0':
+		return RetornarBpm()
+	else: 
+		try:
+			return int(val)
+		except:
+			Imprimir("O valor inserido não é válido. Utilizando valor padrão de 60 BPM.")
+			return 60
+
 def obtemCodigo(entrada):
 	soma = 0
 	for letra in entrada:
@@ -56,11 +68,13 @@ def PaginaEscrita():
 	if opcao2 == 1:
 		retorno = IniciarLeitura()
 		opcao3 = EscolherComando([0, 1], ['0- Descartar rascunho', '1- Salvar composição'])
-		if opcao3 == 1:
+		if opcao3 ==  0:
+			return 
+		elif opcao3 == 1:
 			nomeDoArquivo = input(Imprimir('Digite o nome do arquivo a ser salvo: '))
 			arquivoJson['Titulo'] = input(Imprimir('Digite o título da composição: '))
 			arquivoJson['Autor'] = input(Imprimir('Digite o autor da composição: '))
-			arquivoJson['BPM'] =int(input(Imprimir('Digite o valor de BPM da composição: '))) 
+			arquivoJson['BPM'] = DefinirBpmPartitura()
 			arquivoJson["Data"]= retorno
 		with open('./Partituras/'+nomeDoArquivo+'.json', 'w') as file:
 				json.dump(arquivoJson, file, indent=4)

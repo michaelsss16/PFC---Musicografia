@@ -57,6 +57,17 @@ def EsperarBotaoSerPressionado(botao):
 			break;
 	return True
 
+def AguardarQualquerBotaoSerPressionado():
+	while True:
+		time.sleep(0.05)
+		avanco = botaoAvanco.read()
+		time.sleep(0.05)
+		recuo = botaoRecuo.read()
+		time.sleep(0.05)
+		funcao = botaoReset.read()
+		if avanco or recuo or funcao:
+			return 1
+
 def AvancoOuRecuoPressionado(avanco, recuo, reset):
 	avancoPressionado = False
 	recuoPressionado = False
@@ -76,11 +87,11 @@ def AvancoOuRecuoPressionado(avanco, recuo, reset):
 			return 'finalizar'
 		if recuoPressionado and resetPressionado and not valReset:
 			resetPressionado = False
-			Pulsar(buzzer, 1, 2,0.1)
+			Pulsar(buzzer, 1, 1, 0.1)
 			return 0
 		if avancoPressionado and resetPressionado and not valReset:
 			resetPressionado = False
-			Pulsar(buzzer, 1, 3, 0.1)
+			Pulsar(buzzer, 1, 2, 0.1)
 			return 'end'
 		if(valAvanco==True  and  not avancoPressionado):
 			avancoPressionado = True
@@ -107,3 +118,9 @@ def Pulsar(porta, intensidade = 1, quantidadeDePulsos = 2, tempo=0.2, intensidad
 		time.sleep(tempo)
 
 	porta.write(0);
+def Metronomo(bpm, quantidadeDePulsos=6):
+	for i  in range(quantidadeDePulsos):
+		time.sleep(60/bpm-0.1)
+		buzzer.write(1)
+		time.sleep(0.1)
+		buzzer.write(0)

@@ -21,7 +21,8 @@ TEXTOAJUDAPAGINACONTROLEDIRETO = 'Utilize as teclas s, d, f, j, k, e l para repr
 OPCOESPAGINAEXECUCAO = [
 	'0- Retornar a página inicial.',
 	'1- Iniciar reprodução',
-	'2- Escolher partitura.',
+	'2- Iniciar reprodução automatica',
+	'3- Escolher partitura.',
 	'10- Ajuda'
 ]
 TEXTOAJUDAEXECUCAO = "Ao iniciar a execução os pontos da placa apresentarão as notas da partitura do documento escolhido. Pressione o botão de avanço para proceguir com a execução, pressione o botão de recuo para voltar a nota anterior e pressione o botão de função junto com o botão de recuo para retornar ao início da partitura ou com o botão de avanço para finalizar a execução.\nConsulte a documentação, na página inicial, para maiores informações."
@@ -43,6 +44,12 @@ OPCOESPAGINACONFIGURACOES = [
 		'9- Retornar aos padrões de configuração.',
 		'0- Retornar a página anterior.']
 
+# Método de definição de BPM
+OPCOESBPM = [
+	'0- Realizar nova amostragem',
+	'1- Utilizar o BPM amostrado',
+	'2- Inserir valor manualmente'
+]
 Constantes = {
 	"PaginaInicial" : {
 		"MensagemDeFinalizacao" : "Fim do programa"
