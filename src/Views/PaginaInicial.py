@@ -14,7 +14,7 @@ def PaginaInicial():
 	opcao1 = '-1'
 	while opcao1 != 0:
 		Imprimir("Página inicial")
-		opcao1 = EscolherComando([0, 1, 2, 3, 9, 10], OPCOESPAGINAINICIAL)
+		opcao1 = EscolherComando([0, 1, 2, 3, 8, 9, 10], OPCOESPAGINAINICIAL)
 
 		if(opcao1 == 1):
 			PaginaExecucao()
@@ -22,11 +22,13 @@ def PaginaInicial():
 			PaginaEscrita()
 		elif opcao1 == 3:
 			PaginaControleDireto()
-		elif(opcao1 == 9):
+		elif(opcao1 == 8):
 			PaginaConfiguracoes()
-		elif(opcao1 == 10):
+		elif(opcao1 == 9):
 			Imprimir("Abrindo navegador...")
 			webbrowser.open('file://' + os.path.realpath('../README.html'))
+		elif(opcao1 == 10):
+			Imprimir(TEXTOAJUDAPAGINAINICIAL)
 		elif(opcao1 == 0):
 			Imprimir("Fim do programa")
 			AtivarMotores(CELAVAZIA)

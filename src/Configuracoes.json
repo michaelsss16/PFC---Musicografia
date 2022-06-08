@@ -1,19 +1,23 @@
 {
     "Interface": {
-        "BipsBuzzer": false,
+        "BipsBuzzer": true,
         "InformacoesPartitura": true,
         "BipCompasso": true,
         "MensagemCompasso": true,
-        "Metronomo": true,
-        "MatrizBraille": true
+        "Metronomo": false,
+        "Musicografia": true,
+        "Alfabeto": false,
+        "Matriz": false,
+        "ResetCela": false
     },
     "Sintetizador": {
         "Sintetizador": false,
         "Voz": 4
     },
+    "Partitura": {
+        "Arquivo": "./Partituras/Escalas.json"
+    },
     "Arduino": {
-        "Porta": "COM3",
-        "BotaoAvanco": "a:0:i",
-        "BotaoRecuo": ""
+        "Porta": "COM3"
     }
 }

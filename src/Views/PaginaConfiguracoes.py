@@ -21,23 +21,43 @@ def AlterarConfiguracao(chave1, chave2,textoParametro, ehBinario =True, valor = 
 
 def PaginaConfiguracoes():
 	Imprimir("Página de configurações")
-	opcao2 = EscolherComando([0, 1, 2, 3, 8, 9], OPCOESPAGINACONFIGURACOES )
-	if opcao2 == '0':
-		return 
-	if(opcao2 == 1):
-		AlterarConfiguracao("Sintetizador",'Sintetizador', 'sintetizador de voz')
-	if opcao2 == 2:
-		AlterarConfiguracao('Interface', 'BipsBuzzer', 'bips da interface')
-	if opcao2 ==  3:
-		AlterarVozDoSintetizador()
+	while True:
+		opcao2 = EscolherComando([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 18, 19], OPCOESPAGINACONFIGURACOES )
+		if opcao2 == 0:
+			break
+		if(opcao2 == 1):
+			AlterarConfiguracao("Sintetizador",'Sintetizador', 'sintetizador de voz')
+		if opcao2 == 2:
+			AlterarConfiguracao('Interface', 'BipsBuzzer', 'bips da interface')
+		if opcao2 ==  3:
+			AlterarVozDoSintetizador()
 
-	if opcao2 == 8:
-		escolha = input(Imprimir("Digite o número da porta que deseja atribuir para comunicação com a placa arduino:"))
-		AlterarPortaDeComunicacao(escolha)
+		if opcao2 == 4:
+			AlterarConfiguracao('Interface', 'Metronomo', 'metrônomo')
+		if opcao2 == 5:
+			AlterarConfiguracao('Interface', 'InformacoesPartitura', 'informações da partitura')
+		if opcao2 == 6:
+			AlterarConfiguracao('Interface', 'BipCompasso', 'bips do compasso')
+		if opcao2 == 7:
+			AlterarConfiguracao('Interface', 'MensagemCompasso', 'bips do compasso')
+		if opcao2 == 8:
+			AlterarConfiguracao('Interface', 'Musicografia', 'apresentação de dados musicográficos')
+		if opcao2 == 9:
+			AlterarConfiguracao('Interface', 'Alfabeto', 'apresentação de dados do alfabeto tradicional')
+		if opcao2 == 10:
+			AlterarConfiguracao('Interface', 'Matriz', 'apresentação da matriz de acionamento dos motores')
+		if opcao2 == 11:
+			AlterarConfiguracao('Interface', 'ResetCela', 'adição de espaço entre duas notas consecutivas idênticas durante a reprodução')
 
-	if(opcao2==9):
-		with open('Configuracoes.json', 'w') as file:
-			json.dump(ConfiguracaoPadrao, file, indent=4)
-			file.close()
-		
+		if opcao2 == 18:
+			try:
+				escolha = input(Imprimir("Digite o número da porta que deseja atribuir para comunicação com a placa arduino:"))
+				AlterarPortaDeComunicacao(escolha)
+			except:
+				Imprimir('O valor inserido não é válido')
+		if(opcao2==19):
+			with open('Configuracoes.json', 'w') as file:
+				json.dump(ConfiguracaoPadrao, file, indent=4)
+				file.close()
+	return
 		

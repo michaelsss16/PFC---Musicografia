@@ -14,17 +14,21 @@ ConfiguracaoPadrao = {
 		"InformacoesPartitura":True,
 		"BipCompasso":True,
 		"MensagemCompasso":True,
-		"Metronomo":True,
-		"MatrizBraille" : True
+		"Metronomo":False,
+		"Musicografia" : True,
+		"Alfabeto" : False,
+		"Matriz" : False,
+		"ResetCela": True
 	},
 	"Sintetizador": {
 		"Sintetizador": False,
 		"Voz": 4
 	},
+	"Partitura":{
+		"Arquivo": "./Partituras/PartituraInicial.json"
+	},
 	"Arduino" : {
-		"Porta": "COM3",
-		"BotaoAvanco" : "a:0:i",
-		"BotaoRecuo" : ""
+		"Porta": "COM3"
 	}
 }
 

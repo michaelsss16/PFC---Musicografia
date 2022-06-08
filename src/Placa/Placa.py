@@ -33,6 +33,7 @@ board.analog[1].enable_reporting()
 def AtivarMotores(cela):
 	maxang = 0
 	minAng = 90
+
 	ponto1.write(maxang) if cela[0] else ponto1.write(minAng ) 
 	ponto2.write(maxang ) if cela[1] else ponto2.write(minAng) 
 	ponto3.write(maxang ) if cela[2] else ponto3.write(minAng ) 

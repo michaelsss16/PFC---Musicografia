@@ -9,7 +9,8 @@ from Utils.Util import *
 from pyfirmata import ArduinoMega, util
 
 # Variáveis globais
-partituraSelecionada = './Partituras/PartituraInicial.json'
+global partituraSelecionada 
+partituraSelecionada = Configuracoes['Partitura']['Arquivo']
 
 def ApresentarInformacoesPartitura(arquivo):
 	try:
@@ -19,6 +20,7 @@ def ApresentarInformacoesPartitura(arquivo):
 			print('BPM: '+str(arquivo['BPM']))
 	except:
 		print('Não foi possível encontrar as informações da partitura selecionada')
+
 # Definição das funções utilizadas para acesso ao dicionário braille e conversão dos pontos para cela matricial
 def RetornarDicionario():
 	file = open('DicionarioCombinacoes.json', encoding='utf-8', mode='r') 
@@ -27,11 +29,12 @@ def RetornarDicionario():
 	return dic
 
 
-def AprsentarInformacoesNota(nota, dicionario):
+def ApresentarInformacoesNota(nota, dicionario):
 	try:
-		Imprimir(dicionario[str(nota)][0])
+		if Configuracoes['Interface']['Musicografia']: Imprimir(dicionario[str(nota)][1])
+		if Configuracoes['Interface']['Alfabeto']: Imprimir(dicionario[str(nota)][0])
 	except:
-		return
+		Imprimir(" ")
 
 def ConverterParaCela(valor):
 	cela = [0, 0, 0, 0, 0, 0]
@@ -41,8 +44,7 @@ def ConverterParaCela(valor):
 		vetor = vetor[::-1]
 		for d in range(len(vetor)):
 			cela[d] = vetor[d]
-		if Configuracoes:
-			print(cela)
+		if Configuracoes['Interface']['Matriz']: Imprimir(cela)
 		return cela
 	except:
 		#Imprimir("Erro na definição da cela. Verifique o documento de partitura")
@@ -65,6 +67,17 @@ def EscolherPartitura():
 	else:
 		Imprimir("Partitura escolhida: " + arquivos[escolha])
 		partituraSelecionada = './Partituras/'+ arquivos[escolha]
+		Configuracoes['Partitura']['Arquivo'] =  partituraSelecionada 
+		with open('Configuracoes.json', 'w') as file:
+			json.dump(Configuracoes, file, indent=4)
+
+		try:
+			with open(partituraSelecionada, encoding='utf-8', mode='r') as file:
+				arquivo = json.load(file)
+				file.close()
+			ApresentarInformacoesPartitura(arquivo)
+		except:
+			Imprimir("Ocorreu um problema ao tentar carregar o arquivo de partitura")
 	return 
 
 #Funções auxiliares de navegação na matriz da composição
@@ -115,6 +128,7 @@ def CompassoAnterior(vetorFinais, nota):
 # Função principal para a reprodução 
 def IniciarReproducao(modo, bpm = 60):
 	global partituraSelecionada
+	notaAnterior = -1
 	Dicionario = RetornarDicionario()
 	with open(partituraSelecionada, encoding='utf-8', mode='r') as file:
 		arquivo = json.load(file)
@@ -149,14 +163,18 @@ def IniciarReproducao(modo, bpm = 60):
 	notaCompasso = 0
 	compasso = 0
 
-
 	while notaLinear!= tamanhoTotal+1:
 		if notaCompasso == 0 and compasso>=0 and Configuracoes['Interface']['BipCompasso']:  
-			Pulsar(buzzer, 1, 1, 0.05)
+			Pulsar(buzzer, 1, 1, 0.1)
 			if Configuracoes['Interface']['MensagemCompasso']: Imprimir('Compasso número '+ str(compasso+1))
 
-		AtivarMotores(ConverterParaCela(composicao[compasso][notaCompasso]))
-		AprsentarInformacoesNota(composicao[compasso][notaCompasso], Dicionario)
+		nota = composicao[compasso][notaCompasso]
+		if nota == notaAnterior and Configuracoes['Interface']['ResetCela']:
+			AtivarMotores(CELAVAZIA)
+			time.sleep(0.25)
+		AtivarMotores(ConverterParaCela(nota))
+		ApresentarInformacoesNota(nota, Dicionario)
+		notaAnterior = nota
 
 		if modo == 'automatico':
 			time.sleep(60/bpm)
