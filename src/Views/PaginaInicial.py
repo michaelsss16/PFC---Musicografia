@@ -33,6 +33,5 @@ def PaginaInicial():
 			Imprimir("Fim do programa")
 			AtivarMotores(CELAVAZIA)
 			Pulsar(buzzer, 1, 1, 0.5)
-			exit()
 			return 
 

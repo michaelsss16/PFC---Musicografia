@@ -4,18 +4,18 @@
         "InformacoesPartitura": true,
         "BipCompasso": true,
         "MensagemCompasso": true,
-        "Metronomo": false,
+        "Metronomo": true,
         "Musicografia": true,
-        "Alfabeto": false,
+        "Alfabeto": true,
         "Matriz": false,
-        "ResetCela": false
+        "ResetCela": true
     },
     "Sintetizador": {
         "Sintetizador": false,
         "Voz": 4
     },
     "Partitura": {
-        "Arquivo": "./Partituras/Escalas.json"
+        "Arquivo": "./Partituras/Combina\u00e7\u00f5es.json"
     },
     "Arduino": {
         "Porta": "COM3"
